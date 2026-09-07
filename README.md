@@ -93,9 +93,6 @@ E:\Fiji\plugins\Fourier-Coherence-Score.jar
 E:\Fiji\jars\jtransforms.jar
 ```
 
-The `.java` source and `jet.lut` are not required for the Fiji installation.
-The plugin uses Fiji's built-in **Fire** lookup table.
-
 ## ImageJ installation — Java source
 
 1. Close ImageJ.
