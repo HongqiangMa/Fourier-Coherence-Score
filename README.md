@@ -1,13 +1,49 @@
 # Fourier Coherence Score
 
-**Fourier Coherence Score (FCS)** is an ImageJ/Fiji plugin for quantitative
-image-quality assessment. The score ranges from **0 to 1**, with higher values
-indicating better image quality.
+## A Reference-Free Metric for Quantitative Microscopy Image Quality Assessment
 
-The plugin supports single images and image stacks. It can generate spatially
-resolved image-quality maps, calculate FCS across a stack, identify the slice
-with the highest FCS, map regional focus depth, and reconstruct an all-in-focus
-image.
+Reliable microscopy measurements depend on images that preserve biologically
+meaningful structural information. Assessing that quality is difficult because
+noise, optical blur, signal level, and the amount of structure can change
+independently, while many conventional metrics respond differently to each of
+these factors.
+
+The **Fourier Coherence Score (FCS)** is a reference-free and training-free
+measure of structural image quality calculated directly from a single image.
+It divides the image into two complementary interleaved samplings and measures
+their normalized correlation in a selected Fourier-frequency band. Because
+genuine image structure is coherently represented in both samplings while
+uncorrelated noise is not, FCS provides a normalized score from **0 to 1**;
+higher values indicate stronger, more consistently supported structural
+information.
+
+Numerical evaluation across point-spread-function width, signal-to-noise ratio,
+signal intensity, and structural quantity showed that FCS tracks image-quality
+improvements consistently across these distinct determinants. The framework
+also supports regional quality mapping within a field of view and focus
+assessment across fluorescence, bright-field, hematoxylin and eosin, and
+quantitative phase microscopy. This repository provides an ImageJ/Fiji plugin
+for applying FCS to individual images and image stacks.
+
+## Principle
+
+![Principle and focus-assessment demonstration of the Fourier Coherence Score](./FCS.jpg)
+
+*Principle of the Fourier Coherence Score. (A) The input image is separated
+into two complementary interleaved representations. Their Fourier transforms
+are restricted to a prescribed spatial-frequency band and compared using a
+normalized cross-correlation. (B) Representative planes from a microscopy
+image stack. (C) The corresponding FCS profile, in which the maximum identifies
+the slice with the strongest coherently supported structural information.*
+
+For filtered Fourier representations `A` and `B`, FCS is calculated as:
+
+```text
+FCS = |sum(A * conjugate(B))| / sqrt(sum(|A|^2) * sum(|B|^2))
+```
+
+This self-referenced calculation does not require a ground-truth image, a
+separate reference acquisition, or a trained model.
 
 ## Features
 
@@ -34,21 +70,14 @@ image.
 
 ## Requirements
 
-- ImageJ 1.x or Fiji.
 - A grayscale image or grayscale image stack.
-- JTransforms 2.4 using the `edu.emory.mathcs.jtransforms` namespace.
+- **Fiji:** use the compiled `Fourier-Coherence-Score.jar`. It requires the
+  legacy JTransforms package `edu.emory.mathcs.jtransforms`, which is commonly
+  provided by `Fiji.app/jars/jtransforms.jar`.
+- **ImageJ 1.x:** compile `Fourier_Coherence_Score_.java` after installing a
+  compatible JTransforms library.
 
-In Fiji, the dependency is commonly installed as:
-
-```text
-Fiji.app/jars/jtransforms.jar
-```
-
-> **Compatibility note:** `JTransforms-3.1-with-dependencies.jar` normally uses
-> the newer `org.jtransforms` namespace and is not directly compatible with the
-> current plugin source.
-
-## Installation in Fiji
+## Fiji installation — compiled JAR
 
 1. Download [Fourier-Coherence-Score.jar](./Fourier-Coherence-Score.jar).
 2. Close Fiji.
@@ -63,8 +92,53 @@ Fiji.app/jars/jtransforms.jar
 6. Open a grayscale image or image stack.
 7. Select **Plugins > Fourier Coherence Score**.
 
-The plugin uses ImageJ/Fiji's built-in **Fire** lookup table. A separate
-`jet.lut` file is not required.
+For example, a Windows installation at `E:\Fiji` should contain:
+
+```text
+E:\Fiji\plugins\Fourier-Coherence-Score.jar
+E:\Fiji\jars\jtransforms.jar
+```
+
+The `.java` source and `jet.lut` are not required for the Fiji installation.
+The plugin uses Fiji's built-in **Fire** lookup table.
+
+## ImageJ installation — Java source
+
+1. Close ImageJ.
+2. Copy a compatible JTransforms JAR into the ImageJ plugins folder:
+
+   ```text
+   ImageJ/plugins/
+   ```
+
+3. Restart ImageJ so the dependency is added to its Java class path.
+4. Select **Plugins > Compile and Run**.
+5. Choose [Fourier_Coherence_Score_.java](./Fourier_Coherence_Score_.java).
+6. Allow ImageJ to compile and run the plugin.
+7. If the command does not appear immediately, restart ImageJ.
+8. Run **Plugins > Fourier Coherence Score**.
+
+The current Java source imports:
+
+```java
+edu.emory.mathcs.jtransforms.fft.FloatFFT_2D
+```
+
+It therefore compiles directly with legacy JTransforms 2.4. The file
+`JTransforms-3.1-with-dependencies.jar` normally provides the newer namespace:
+
+```java
+org.jtransforms.fft.FloatFFT_2D
+```
+
+To compile against JTransforms 3.1, change the import in the Java source from
+`edu.emory.mathcs.jtransforms.fft.FloatFFT_2D` to
+`org.jtransforms.fft.FloatFFT_2D`. This namespace change is not needed when
+installing the precompiled Fiji JAR.
+
+Running the `.java` file in a Script Editor generally executes it only for the
+current session. Use **Compile and Run** when you want ImageJ to compile it as a
+reusable plugin.
 
 ## Usage
 
