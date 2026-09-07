@@ -166,12 +166,10 @@ indicate regions with better image quality.
 | Parameter | Description |
 | --- | --- |
 | Region size | Width and height of each local analysis window. Smaller regions provide finer spatial localization; larger regions provide more stable Fourier statistics. |
-| Largest feature included | Largest spatial feature included in the evaluated Fourier-frequency band, expressed in pixels. |
-| Enable regularization term | Applies virtual-noise regularization to reduce artificially high scores in weak-signal regions. |
+| Largest feature included | Largest spatial feature included in the evaluated Fourier-frequency band, expressed in pixels. The default value is 16 pixel.  |
+| Enable regularization term | Applies virtual-noise regularization to reduce artificially high scores in high correlated regions. |
 | Show regional results table | Displays the regional measurements used to generate the map. |
 
-Regional windows use 50% overlap. The regional results are interpolated and
-smoothed to generate maps with the same width and height as the input image.
 
 ## Output names
 
