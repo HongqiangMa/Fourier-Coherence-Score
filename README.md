@@ -36,12 +36,6 @@ normalized cross-correlation. (B) Representative planes from a microscopy
 image stack. (C) The corresponding FCS profile, in which the maximum identifies
 the slice with the strongest coherently supported structural information.*
 
-For filtered Fourier representations `A` and `B`, FCS is calculated as:
-
-```text
-FCS = |sum(A * conjugate(B))| / sqrt(sum(|A|^2) * sum(|B|^2))
-```
-
 This self-referenced calculation does not require a ground-truth image, a
 separate reference acquisition, or a trained model.
 
