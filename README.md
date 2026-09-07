@@ -188,6 +188,12 @@ The editable plugin source is available in
 
 Hongqiang Ma
 
+## Citation
+
+If you use the Fourier Coherence Score in your research, please cite:
+
+Hongqiang Ma. “Fourier Coherence Score: A Reference-Free Metric for Quantitative Microscopy Image Quality Assessment.”
+
 ## License
 
 This project is released under the [MIT License](./LICENSE).
